@@ -1,0 +1,31 @@
+{
+    "name": "klevu/module-frontend-js",
+    "description": "Klevu Frontend JavaScript",
+    "require": {
+        "php": "~5.5.0|~5.6.0|~7.0.0|~7.1.0|~7.2.0|~7.3.0|~7.4.0",
+        "magento/module-backend": "@stable",
+        "magento/module-config": "@stable",
+        "klevu/module-productsearch": "^2.0.0"
+    },
+    "type": "magento-module",
+    "version": "1.0.0",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "authors": [
+        {
+            "name": "Klevu Oy",
+            "email": "niraj.aswani@klevu.com",
+            "homepage": "https://www.klevu.com/"
+        }
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Klevu\\FrontendJs\\": ""
+        }
+    }
+}

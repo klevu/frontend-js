@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="head.additional">
+            <block name="klevu_frontendjs.js_includes"
+                   class="Klevu\FrontendJs\Block\Html\Head\JsIncludes"
+                   template="Klevu_FrontendJs::html/head/js_includes.phtml">
+                <arguments>
+                    <argument name="js_includes" xsi:type="array">
+                        <item name="lib" xsi:type="array">
+                            <item name="before" xsi:type="string">-</item>
+                            <item name="url" xsi:type="string"><![CDATA[//js.klevu.com/core/v2/klevu.js]]></item>
+                        </item>
+                    </argument>
+                </arguments>
+            </block>
+            <block name="klevu_frontendjs.js_init"
+                   class="Klevu\FrontendJs\Block\Html\Head\JsInit"
+                   template="Klevu_FrontendJs::html/head/js_init.phtml"
+                   after="klevu_frontendjs.js_includes">
+                <container name="klevu_frontendjs.js_init.additional.before" as="additional_before"/>
+                <container name="klevu_frontendjs.js_init.additional.after" as="additional_after"/>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

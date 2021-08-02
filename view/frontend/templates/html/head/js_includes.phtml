@@ -1,0 +1,7 @@
+<?php
+    /** @var Klevu\FrontendJs\Block\Html\Head\JsIncludes $block */
+    $jsIncludesUrls = $block->getJsIncludesUrls();
+?>
+<?php foreach ($jsIncludesUrls as $jsIncludesUrl): ?>
+    <script type="text/javascript" src="<?php echo $block->escapeQuote($jsIncludesUrl); ?>"></script>
+<?php endforeach; ?>

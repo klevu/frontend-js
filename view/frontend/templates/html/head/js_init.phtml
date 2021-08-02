@@ -1,0 +1,11 @@
+<?php
+    /** @var Klevu\FrontendJs\Block\Html\Head\JsInit $block */
+?>
+<script type="text/javascript" id="klevu_jsinteractive">
+    klevu.interactive(function () {
+        var options = <?php /** @noEscape */ echo $block->getInteractiveOptionsSerialized(); ?>;
+        <?php /** @noEscape */ echo $block->getChildHtml('additional_before'); ?>
+        klevu(options);
+        <?php /** @noEscape */ echo $block->getChildHtml('additional_after'); ?>
+    });
+</script>

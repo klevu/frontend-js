@@ -2,9 +2,11 @@
 
 namespace Klevu\FrontendJs\Block\Html\Head;
 
+use Klevu\FrontendJs\Service\IfConfigEvaluator;
 use Klevu\FrontendJs\Service\IsEnabledDeterminer;
 use Klevu\FrontendJs\Service\JsIncludesSorter;
 use Klevu\FrontendJs\Traits\CurrentStoreIdTrait;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\ScopeInterface;
@@ -29,22 +31,29 @@ class JsIncludes extends Template
     private $isEnabledDeterminer;
 
     /**
-     * JsIncludes constructor.
+     * @var IfConfigEvaluator
+     */
+    private $ifConfigEvaluator;
+
+    /**
      * @param Context $context
      * @param JsIncludesSorter $jsIncludesSorter
      * @param IsEnabledDeterminer $isEnabledDeterminer
      * @param array $data
+     * @param IfConfigEvaluator|null $ifConfigEvaluator
      */
     public function __construct(
         Context $context,
         JsIncludesSorter $jsIncludesSorter,
         IsEnabledDeterminer $isEnabledDeterminer,
-        array $data = []
+        array $data = [],
+        IfConfigEvaluator $ifConfigEvaluator = null
     ) {
         parent::__construct($context, $data);
 
         $this->jsIncludesSorter = $jsIncludesSorter;
         $this->isEnabledDeterminer = $isEnabledDeterminer;
+        $this->ifConfigEvaluator = $ifConfigEvaluator ?: ObjectManager::getInstance()->get(IfConfigEvaluator::class);
     }
 
     /**
@@ -96,15 +105,43 @@ class JsIncludes extends Template
                 return false;
             }
 
-            if (!empty($jsInclude['if_config'])) {
-                $currentStoreId = $this->getCurrentStoreId($this->_storeManager, $this->_logger);
-                if (null === $currentStoreId ||
-                    !$this->_scopeConfig->isSetFlag($jsInclude['if_config'], ScopeInterface::SCOPE_STORES, $currentStoreId)) {
-                    return false;
+            if (empty($jsInclude['if_config'])) {
+                return true;
+            }
+
+            $currentStoreId = $this->getCurrentStoreId($this->_storeManager, $this->_logger);
+            if (null === $currentStoreId) {
+                return false;
+            }
+
+            if (is_string($jsInclude['if_config'])) {
+                return $this->_scopeConfig->isSetFlag(
+                    $jsInclude['if_config'],
+                    ScopeInterface::SCOPE_STORES,
+                    $currentStoreId
+                );
+            }
+
+            $return = true;
+            if (is_array($jsInclude['if_config'])) {
+                foreach ($jsInclude['if_config'] as $ifConfig) {
+                    if (empty($ifConfig['path'])
+                        || !isset($ifConfig['conditions'])
+                        || !is_array($ifConfig['conditions'])) {
+                        continue;
+                    }
+
+                    $configValue = $this->_scopeConfig->getValue(
+                        $ifConfig['path'],
+                        ScopeInterface::SCOPE_STORES,
+                        $currentStoreId
+                    );
+
+                    $return = $return && $this->ifConfigEvaluator->execute($configValue, $ifConfig['conditions']);
                 }
             }
 
-            return true;
+            return $return;
         });
     }
 

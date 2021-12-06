@@ -28,6 +28,11 @@ class InteractiveOptionsGenerator implements InteractiveOptionsGeneratorServiceI
         array $interactiveOptionsProviders = []
     ) {
         $this->logger = $logger;
+
+        // This allows overriding a provider with xsi:type="null" in di.xml
+        $interactiveOptionsProviders = array_filter($interactiveOptionsProviders);
+        // This allows extending modules the ability to order injected providers
+        ksort($interactiveOptionsProviders);
         array_walk($interactiveOptionsProviders, [$this, 'addInteractiveOptionsProvider']);
     }
 

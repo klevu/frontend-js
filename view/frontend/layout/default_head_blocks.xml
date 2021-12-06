@@ -2,7 +2,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="head.additional">
-            <block name="klevu_frontendjs.js_includes"
+            <block name="klevu_frontendjs.js_includes.core"
                    class="Klevu\FrontendJs\Block\Html\Head\JsIncludes"
                    template="Klevu_FrontendJs::html/head/js_includes.phtml">
                 <arguments>
@@ -14,13 +14,18 @@
                     </argument>
                 </arguments>
             </block>
+            <block name="klevu_frontendjs.js_api_keys"
+                   class="Klevu\FrontendJs\Block\Html\Head\JsApiKeys"
+                   template="Klevu_FrontendJs::html/head/js_api_keys.phtml"/>
             <block name="klevu_frontendjs.js_init"
                    class="Klevu\FrontendJs\Block\Html\Head\JsInit"
-                   template="Klevu_FrontendJs::html/head/js_init.phtml"
-                   after="klevu_frontendjs.js_includes">
+                   template="Klevu_FrontendJs::html/head/js_init.phtml">
                 <container name="klevu_frontendjs.js_init.additional.before" as="additional_before"/>
                 <container name="klevu_frontendjs.js_init.additional.after" as="additional_after"/>
             </block>
+            <block name="klevu_frontendjs.js_includes"
+                   class="Klevu\FrontendJs\Block\Html\Head\JsIncludes"
+                   template="Klevu_FrontendJs::html/head/js_includes.phtml"/>
         </referenceBlock>
     </body>
 </page>

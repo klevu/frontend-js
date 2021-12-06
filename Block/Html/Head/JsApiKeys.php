@@ -9,7 +9,7 @@ use Klevu\FrontendJs\Traits\CurrentStoreIdTrait;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 
-class JsInit extends Template
+class JsApiKeys extends Template
 {
     use CurrentStoreIdTrait;
 
@@ -31,7 +31,7 @@ class JsInit extends Template
     /**
      * @var array
      */
-    private $interactiveOptions;
+    private $jsApiKeysArray;
 
     /**
      * @param Context $context
@@ -57,29 +57,28 @@ class JsInit extends Template
     /**
      * @return array
      */
-    public function getInteractiveOptions()
+    public function getJsApiKeysArray()
     {
-        if (null === $this->interactiveOptions) {
-            $this->interactiveOptions = $this->interactiveOptionsGeneratorService->execute();
-            array_walk($this->interactiveOptions, static function (&$sectionSettings) {
-                $sectionSettings = array_filter($sectionSettings, static function ($key) {
-                    return 'apiKey' !== $key;
-                }, ARRAY_FILTER_USE_KEY);
-            });
+        if (null === $this->jsApiKeysArray) {
+            $interactiveOptions = $this->interactiveOptionsGeneratorService->execute();
 
-            $this->interactiveOptions = array_filter($this->interactiveOptions);
+            $this->jsApiKeysArray = [];
+            foreach ($interactiveOptions as $sectionKey => $sectionSettings) {
+                $this->jsApiKeysArray[$sectionKey] = array_intersect_key($sectionSettings, ['apiKey' => null]);
+            }
+            $this->jsApiKeysArray = array_filter($this->jsApiKeysArray);
         }
 
-        return $this->interactiveOptions;
+        return $this->jsApiKeysArray;
     }
 
     /**
      * @return string
      */
-    public function getInteractiveOptionsSerialized()
+    public function getJsApiKeysSerialized()
     {
         return $this->serializer->serialize(
-            $this->getInteractiveOptions()
+            $this->getJsApiKeysArray()
         );
     }
 
@@ -90,7 +89,8 @@ class JsInit extends Template
     protected function _toHtml()
     {
         $currentStoreId = $this->getCurrentStoreId($this->_storeManager, $this->_logger);
-        if (!$this->isEnabledDeterminer->execute($currentStoreId)) {
+        if (!$this->isEnabledDeterminer->execute($currentStoreId)
+            || !$this->getJsApiKeysArray()) {
             return '';
         }
 

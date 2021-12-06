@@ -2,6 +2,12 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Klevu\FrontendJs\Api\InteractiveOptionsGeneratorServiceInterface" type="Klevu\FrontendJs\Service\InteractiveOptionsGenerator"/>
 
+    <type name="Klevu\FrontendJs\Block\Html\Head\JsApiKeys">
+        <arguments>
+            <argument name="serializer" xsi:type="object">Klevu\FrontendJs\Serializer\Json</argument>
+        </arguments>
+    </type>
+
     <type name="Klevu\FrontendJs\Block\Html\Head\JsInit">
         <arguments>
             <argument name="serializer" xsi:type="object">Klevu\FrontendJs\Serializer\Json</argument>
@@ -11,7 +17,7 @@
     <type name="Klevu\FrontendJs\Service\IsEnabledDeterminer">
         <arguments>
             <argument name="isEnabledConditions" xsi:type="array">
-                <item name="frontend_js_config" xsi:type="object">Klevu\FrontendJs\Service\IsEnabledCondition\FrontendJsConfigIsEnabledCondition</item>
+                <item name="_klevu_frontend_js_config" xsi:type="object">Klevu\FrontendJs\Service\IsEnabledCondition\FrontendJsConfigIsEnabledCondition</item>
             </argument>
         </arguments>
     </type>

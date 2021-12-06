@@ -1,6 +1,6 @@
 <?php
 
-namespace Klevu\FrontendJs\Test\Integration\Service\IsEnabledCondition;
+namespace Klevu\FrontendJs\Test\Integration\Service;
 
 use Klevu\FrontendJs\Service\IsEnabledDeterminer;
 use Magento\TestFramework\Helper\Bootstrap;

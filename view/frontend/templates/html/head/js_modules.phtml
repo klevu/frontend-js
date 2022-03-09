@@ -1,0 +1,59 @@
+<?php /** @var Klevu\FrontendJs\Block\Html\Head\JsModules $block */ ?>
+<script type="text/javascript" id="klevu_jsmodules">
+    // Add Price Field Suffix for customer group and currency conversion
+    var klevu_addPriceSuffixToQueryControl = {
+        name: 'addPriceSuffixToQuery',
+        fire: function (data, scope) {
+            var customerData = JSON.parse(window.localStorage.getItem('<?php /** @noEscape */ echo $block->getLocalStorageKey(); ?>') || '{}').<?php /** @noEscape */ echo $block->getCustomerDataKey(); ?> || {
+                customer_group_id: <?php /** @noEscape */ echo $block->getNotLoggedInCustomerGroupId(); ?>
+            };
+            klevu.search.modules.addPriceSuffixToQuery(data, scope, klevu_baseCurrencyCode, customerData.customer_group_id);
+        }
+    };
+
+    (function (klevu) {
+        klevu.extend(true, klevu.search.modules, {
+            addPriceSuffixToQuery: function (data, scope, currencyCode, customerGroupId) {
+                if (typeof data.request.current === "undefined") {
+                    return false;
+                }
+
+                klevu.each(data.request.current.recordQueries, function (key, query) {
+                    //code to fetch prices
+                    klevu.setObjectPath(
+                        data,
+                        "localOverrides.query." + query.id + ".settings.priceFieldSuffix",
+                        currencyCode + '-' + customerGroupId
+                    );
+                });
+            },
+            mageConvertPriceRecordCurrencyData: function (productRecords, currencyCode, currencyRates) {
+                if (!productRecords) {
+                    return;
+                }
+
+                klevu.each(productRecords, function (recordKey, productRecord) {
+                    var fromRate = parseFloat(currencyRates[productRecord.currency] || 0);
+                    var toRate = parseFloat(currencyRates[currencyCode] || 0);
+                    if (!fromRate || !toRate) {
+                        return;
+                    }
+
+                    var exchangeRate = toRate / fromRate;
+
+                    if (klevu.isNumeric(klevu.getObjectPath(productRecord, "price"))) {
+                        productRecord.price *= exchangeRate;
+                    }
+                    if (klevu.isNumeric(klevu.getObjectPath(productRecord, "salePrice"))) {
+                        productRecord.salePrice *= exchangeRate;
+                    }
+                    if (klevu.isNumeric(klevu.getObjectPath(productRecord, "startPrice"))) {
+                        productRecord.startPrice *= exchangeRate;
+                    }
+
+                    productRecord.currency = currencyCode;
+                });
+            }
+        });
+    })(klevu);
+</script>

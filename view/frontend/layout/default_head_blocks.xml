@@ -9,7 +9,7 @@
                     <argument name="js_includes" xsi:type="array">
                         <item name="lib" xsi:type="array">
                             <item name="before" xsi:type="string">-</item>
-                            <item name="url" xsi:type="string"><![CDATA[//js.klevu.com/core/v2/klevu.js]]></item>
+                            <item name="url" xsi:type="string"><![CDATA[https://js.klevu.com/core/v2/klevu.js]]></item>
                         </item>
                     </argument>
                 </arguments>
@@ -17,6 +17,18 @@
             <block name="klevu_frontendjs.js_api_keys"
                    class="Klevu\FrontendJs\Block\Html\Head\JsApiKeys"
                    template="Klevu_FrontendJs::html/head/js_api_keys.phtml"/>
+            <block name="klevu_frontendjs.js_deferred_powerup"
+                   class="Klevu\FrontendJs\Block\Html\Head\JsDeferredPowerUp"
+                   template="Klevu_FrontendJs::html/head/js_deferred_powerup.phtml"/>
+            <block name="klevu_frontendjs.js_modules"
+                   class="Klevu\FrontendJs\Block\Html\Head\JsModules"
+                   template="Klevu_FrontendJs::html/head/js_modules.phtml">
+                <arguments>
+                    <argument name="is_enabled_conditions_fqcn" xsi:type="array">
+                        <item name="_klevu_themev2" xsi:type="string">Klevu\FrontendJs\Service\IsEnabledCondition\FrontendJsConfigIsEnabledCondition</item>
+                    </argument>
+                </arguments>
+            </block>
             <block name="klevu_frontendjs.js_init"
                    class="Klevu\FrontendJs\Block\Html\Head\JsInit"
                    template="Klevu_FrontendJs::html/head/js_init.phtml">
@@ -26,6 +38,12 @@
             <block name="klevu_frontendjs.js_includes"
                    class="Klevu\FrontendJs\Block\Html\Head\JsIncludes"
                    template="Klevu_FrontendJs::html/head/js_includes.phtml"/>
+
+            <container name="klevu_frontendjs.session_data" after="-">
+                <block name="klevu_frontendjs.init_session_data"
+                       class="Klevu\FrontendJs\Block\Html\Head\InitSessionData"
+                       template="Klevu_FrontendJs::html/head/init_session_data.phtml"/>
+            </container>
         </referenceBlock>
     </body>
 </page>

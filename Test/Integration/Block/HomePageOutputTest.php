@@ -32,7 +32,7 @@ class HomePageOutputTest extends AbstractControllerTestCase
 
         if (method_exists($this, 'assertStringContainsString')) {
             $this->assertStringContainsString(
-                '<script type="text/javascript" src="//js.klevu.com/core/v2/klevu.js"></script>',
+                '<script type="text/javascript" src="https://js.klevu.com/core/v2/klevu.js"></script>',
                 $responseBody,
                 'Library JS include is present in response body'
             );
@@ -43,7 +43,7 @@ class HomePageOutputTest extends AbstractControllerTestCase
             );
         } else {
             $this->assertContains(
-                '<script type="text/javascript" src="//js.klevu.com/core/v2/klevu.js"></script>',
+                '<script type="text/javascript" src="https://js.klevu.com/core/v2/klevu.js"></script>',
                 $responseBody,
                 'Library JS include is present in response body'
             );

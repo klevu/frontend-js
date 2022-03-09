@@ -1,0 +1,75 @@
+<?php /** @var Klevu\FrontendJs\Block\Html\Head\InitSessionData $block */ ?>
+<script type="text/javascript" id="klevu_initsessiondata">
+    var nowUnixtime = parseInt(Date.now() / 1000);
+
+    function klevufejs_getCookie() {
+        var c = "",
+            ca = decodeURIComponent(document.cookie).split(';');
+        for (var i = 0; i < ca.length; i++) {
+            c = ca[i];
+            if (typeof c !== "string") {
+                continue;
+            }
+            while (c.charAt(0) === ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf("<?php /** @noEscape */ echo $block->getCookieKey(); ?>=") === 0) {
+                return JSON.parse(c.substring("<?php /** @noEscape */ echo $block->getCookieKey(); ?>=".length, c.length));
+            }
+        }
+        return {
+            <?php /** @noEscape */ echo $block->getExpireSectionsKey(); ?>: {}
+        };
+    }
+
+    document.addEventListener('<?php /** @noEscape */ echo $block->getCustomerDataLoadedEventName(); ?>', function (e) {
+        var klevufejs_cookie = klevufejs_getCookie();
+        klevufejs_cookie.<?php /** @noEscape */ echo $block->getExpireSectionsKey(); ?>.<?php /** @noEscape */ echo $block->getCustomerDataKey(); ?> = nowUnixtime + <?php /** @noEscape */ echo $block->getCustomerDataSectionTtl(); ?>;
+
+        document.cookie = "<?php /** @noEscape */ echo $block->getCookieKey(); ?>=" + JSON.stringify(klevufejs_cookie) + ";" + (new Date((nowUnixtime + <?php /** @noEscape */ echo $block->getCookieLifetime(); ?>) * 1000).toUTCString()) + ";path=<?php /** @noEscape */ echo $block->getCookiePath(); ?>;SameSite=Strict";
+    });
+
+    var klevufejs_cookie = klevufejs_getCookie();
+    var klevuData = {
+        ...{
+            <?php /** @noEsacape */ echo $block->getCustomerDataKey(); ?>: {
+                revalidate_after: -1
+            }
+        },
+        ...JSON.parse(window.localStorage.getItem('<?php /** @noEscape */ echo $block->getLocalStorageKey(); ?>') || '{}')
+    };
+
+    const klevuCustomerDataLoadedEvent = document.createEvent('CustomEvent');
+    klevuCustomerDataLoadedEvent.initEvent('<?php /** @noEscape */ echo $block->getCustomerDataLoadedEventName(); ?>', false, true);
+    const klevuCustomerDataLoadErrorEvent = document.createEvent('CustomEvent');
+    klevuCustomerDataLoadErrorEvent.initEvent('<?php /** @noEscape */ echo $block->getCustomerDataLoadErrorEventName(); ?>', false, true);
+
+    if (typeof klevufejs_cookie.<?php /** @noEscape */ echo $block->getExpireSectionsKey(); ?> !== "object"
+        || (klevufejs_cookie.<?php /** @noEscape */ echo $block->getExpireSectionsKey(); ?>.<?php /** @noEscape */ echo $block->getCustomerDataKey(); ?> || -1) < nowUnixtime
+        || klevuData.<?php /** @noEscape */ echo $block->getCustomerDataKey(); ?>.revalidate_after < nowUnixtime
+    ) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onerror = function (request) {
+            document.dispatchEvent(klevuCustomerDataLoadErrorEvent);
+        };
+        xhttp.ontimeout = function (request) {
+            this.onerror(request);
+        };
+        xhttp.onload = function (request) {
+            if (this.status >= 400 || this.timeout) {
+                this.onerror(request);
+                return;
+            }
+
+            var klevuData = JSON.parse(window.localStorage.getItem('<?php /** @noEscape */ echo $block->getLocalStorageKey(); ?>') || '{}');
+            klevuData.<?php /** @noEscape */ echo $block->getCustomerDataKey(); ?> = JSON.parse(this.response);
+            window.localStorage.setItem('<?php /** @noEscape */ echo $block->getLocalStorageKey(); ?>', JSON.stringify(klevuData));
+
+            document.dispatchEvent(klevuCustomerDataLoadedEvent);
+        };
+        xhttp.open('GET', '<?php /** @noEscape */ echo $block->getCustomerDataApiEndpoint(); ?>', false);
+        xhttp.send();
+    } else {
+        document.dispatchEvent(klevuCustomerDataLoadedEvent);
+    }
+</script>

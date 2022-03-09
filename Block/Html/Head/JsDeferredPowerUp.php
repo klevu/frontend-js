@@ -9,7 +9,7 @@ use Klevu\FrontendJs\Traits\CurrentStoreIdTrait;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 
-class JsInit extends Template
+class JsDeferredPowerUp extends Template
 {
     use CurrentStoreIdTrait;
 
@@ -31,7 +31,7 @@ class JsInit extends Template
     /**
      * @var array
      */
-    private $interactiveOptions;
+    private $jsDeferredPowerUpArray;
 
     /**
      * @param Context $context
@@ -57,38 +57,30 @@ class JsInit extends Template
     /**
      * @return array
      */
-    public function getInteractiveOptions()
+    public function getJsDeferredPowerUpArray()
     {
-        if (null === $this->interactiveOptions) {
-            $this->interactiveOptions = $this->interactiveOptionsGeneratorService->execute();
-            array_walk($this->interactiveOptions, static function (&$sectionSettings) {
-                $sectionSettings = array_filter($sectionSettings, static function ($key) {
-                    return 'apiKey' !== $key;
-                }, ARRAY_FILTER_USE_KEY);
-            });
+        if (null === $this->jsDeferredPowerUpArray) {
+            $this->jsDeferredPowerUpArray = [];
 
-            if (isset($this->interactiveOptions['powerUp'])) {
-                $this->interactiveOptions['powerUp'] = array_filter(
-                    $this->interactiveOptions['powerUp'],
-                    static function ($optionValue) {
-                        return false !== $optionValue;
-                    }
-                );
+            $interactiveOptions = $this->interactiveOptionsGeneratorService->execute();
+            if (isset($interactiveOptions['powerUp']) && is_array($interactiveOptions['powerUp'])) {
+                $this->jsDeferredPowerUpArray = array_filter([
+                    'powerUp' => array_filter($interactiveOptions['powerUp'], static function ($value) {
+                        return false === $value;
+                    }),
+                ]);
             }
-
-            $this->interactiveOptions = array_filter($this->interactiveOptions);
         }
-
-        return $this->interactiveOptions;
+        return $this->jsDeferredPowerUpArray;
     }
 
     /**
      * @return string
      */
-    public function getInteractiveOptionsSerialized()
+    public function getJsDeferredPowerUpSerialized()
     {
         return $this->serializer->serialize(
-            $this->getInteractiveOptions()
+            $this->getJsDeferredPowerUpArray()
         );
     }
 
@@ -99,7 +91,8 @@ class JsInit extends Template
     protected function _toHtml()
     {
         $currentStoreId = $this->getCurrentStoreId($this->_storeManager, $this->_logger);
-        if (!$this->isEnabledDeterminer->execute($currentStoreId)) {
+        if (!$this->isEnabledDeterminer->execute($currentStoreId)
+            || !$this->getJsDeferredPowerUpArray()) {
             return '';
         }
 

@@ -5,6 +5,11 @@
     <preference for="Klevu\FrontendJs\Api\CustomerDataProviderInterface" type="Klevu\FrontendJs\Provider\CustomerDataProvider"/>
     <preference for="Klevu\FrontendJs\Api\SessionIdProviderInterface" type="Klevu\FrontendJs\Provider\SessionIdProvider"/>
 
+    <!--
+        The following blocks remain for legacy reasons. Any extension of these blocks as used in the
+        frontend should now be performed in frontend/di.xml as configuration there will overwrite
+        any arguments injected in the global scope
+    -->
     <type name="Klevu\FrontendJs\Block\Html\Head\JsApiKeys">
         <arguments>
             <argument name="serializer" xsi:type="object">Klevu\FrontendJs\Serializer\Json</argument>

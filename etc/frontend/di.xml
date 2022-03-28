@@ -5,4 +5,28 @@
             <argument name="serializer" xsi:type="object">Klevu\FrontendJs\Serializer\Json</argument>
         </arguments>
     </type>
+
+    <virtualType name="Klevu\FrontendJs\Service\InteractiveOptionsGenerator\Frontend"
+                 type="Klevu\FrontendJs\Service\InteractiveOptionsGenerator"/>
+
+    <type name="Klevu\FrontendJs\Block\Html\Head\JsApiKeys">
+        <arguments>
+            <argument name="serializer" xsi:type="object">Klevu\FrontendJs\Serializer\Json</argument>
+            <argument name="interactiveOptionsGeneratorService" xsi:type="object">Klevu\FrontendJs\Service\InteractiveOptionsGenerator\Frontend</argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\FrontendJs\Block\Html\Head\JsInit">
+        <arguments>
+            <argument name="serializer" xsi:type="object">Klevu\FrontendJs\Serializer\Json</argument>
+            <argument name="interactiveOptionsGeneratorService" xsi:type="object">Klevu\FrontendJs\Service\InteractiveOptionsGenerator\Frontend</argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\FrontendJs\Block\Html\Head\JsDeferredPowerUp">
+        <arguments>
+            <argument name="serializer" xsi:type="object">Klevu\FrontendJs\Serializer\Json</argument>
+            <argument name="interactiveOptionsGeneratorService" xsi:type="object">Klevu\FrontendJs\Service\InteractiveOptionsGenerator\Frontend</argument>
+        </arguments>
+    </type>
 </config>

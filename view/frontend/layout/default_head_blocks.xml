@@ -9,7 +9,7 @@
                     <argument name="js_includes" xsi:type="array">
                         <item name="lib" xsi:type="array">
                             <item name="before" xsi:type="string">-</item>
-                            <item name="url" xsi:type="string"><![CDATA[https://js.klevu.com/core/v2/klevu.js]]></item>
+                            <item name="url" xsi:type="string"><![CDATA[https://{{ klevu_search/general/js_url }}/core/v2/klevu.js]]></item>
                         </item>
                     </argument>
                 </arguments>

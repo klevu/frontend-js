@@ -109,7 +109,7 @@ class InitSessionData extends Template
      */
     public function getCustomerDataApiEndpoint()
     {
-        return $this->getCurrentBaseUrl() . '/rest/V1/klevu/customerData';
+        return $this->getCurrentBaseUrl() . 'rest/V1/klevu/customerData';
     }
 
     /**
@@ -138,7 +138,7 @@ class InitSessionData extends Template
         if (null === $this->baseUrl) {
             try {
                 $store = $this->_storeManager->getStore();
-                $this->baseUrl = (string)$store->getBasseUrl(UrlInterface::URL_TYPE_WEB);
+                $this->baseUrl = (string)$store->getBaseUrl(UrlInterface::URL_TYPE_LINK);
             } catch (NoSuchEntityException $e) {
                 $this->_logger->error($e->getMessage());
                 $this->baseUrl = '';

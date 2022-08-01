@@ -2,6 +2,10 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="head.additional">
+            <block name="klevu_frontendjs.js_preconnect"
+                   class="Klevu\FrontendJs\Block\Html\Head\JsPreConnect"
+                   template="Klevu_FrontendJs::html/head/js_preconnect.phtml"
+                   before="-"/>
             <block name="klevu_frontendjs.js_includes.core"
                    class="Klevu\FrontendJs\Block\Html\Head\JsIncludes"
                    template="Klevu_FrontendJs::html/head/js_includes.phtml">

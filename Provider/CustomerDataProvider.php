@@ -6,8 +6,10 @@ use Klevu\FrontendJs\Api\CustomerDataProviderInterface;
 use Klevu\FrontendJs\Api\Data\CustomerDataInterface;
 use Klevu\FrontendJs\Api\Data\CustomerDataInterfaceFactory;
 use Klevu\FrontendJs\Api\SessionIdProviderInterface;
+use Klevu\Search\Api\Provider\Customer\CustomerIdProviderInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Framework\Session\SessionManagerInterface;
@@ -50,13 +52,19 @@ class CustomerDataProvider implements CustomerDataProviderInterface
      */
     private $customer;
 
+    /**
+     * @var CustomerIdProviderInterface
+     */
+    private $customerIdProvider;
+
     public function __construct(
         LoggerInterface $logger,
         SessionManagerInterface $customerSession,
         CustomerRepositoryInterface $customerRepository,
         SessionIdProviderInterface $sessionIdProvider,
         RemoteAddress $remoteAddress,
-        CustomerDataInterfaceFactory $customerDataFactory
+        CustomerDataInterfaceFactory $customerDataFactory,
+        CustomerIdProviderInterface $customerIdProvider = null
     ) {
         $this->logger = $logger;
         $this->customerSession = $customerSession;
@@ -64,6 +72,8 @@ class CustomerDataProvider implements CustomerDataProviderInterface
         $this->sessionIdProvider = $sessionIdProvider;
         $this->remoteAddress = $remoteAddress;
         $this->customerDataFactory = $customerDataFactory;
+        $this->customerIdProvider = $customerIdProvider ?:
+            ObjectManager::getInstance()->get(CustomerIdProviderInterface::class);
     }
 
     /**
@@ -106,11 +116,11 @@ class CustomerDataProvider implements CustomerDataProviderInterface
 
     /**
      * @param CustomerInterface $customer
+     *
      * @return string
      */
     private function generateIdCode(CustomerInterface $customer)
     {
-        // @todo Replace with more secure hash mechanism
-        return sprintf('enc-%s', md5($customer->getEmail()));
+        return $this->customerIdProvider->execute($customer->getEmail());
     }
 }

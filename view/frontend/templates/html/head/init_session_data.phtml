@@ -2,19 +2,26 @@
 <script type="text/javascript" id="klevu_initsessiondata">
     var nowUnixtime = parseInt(Date.now() / 1000);
 
-    function klevufejs_getCookie() {
+    function klevufejs_getCookie(name) {
+        if (typeof (name) === "undefined") {
+            name = "<?php /** @noEscape */ echo $block->getCookieKey(); ?>";
+        }
         var c = "",
-            ca = decodeURIComponent(document.cookie).split(';');
+            ca = document.cookie.split(';');
+
         for (var i = 0; i < ca.length; i++) {
             c = ca[i];
             if (typeof c !== "string") {
                 continue;
             }
-            while (c.charAt(0) === ' ') {
-                c = c.substring(1);
-            }
-            if (c.indexOf("<?php /** @noEscape */ echo $block->getCookieKey(); ?>=") === 0) {
-                return JSON.parse(c.substring("<?php /** @noEscape */ echo $block->getCookieKey(); ?>=".length, c.length));
+            var cookiePair = c.split("=");
+
+            if (name === cookiePair[0].trim()) {
+                try {
+                    return JSON.parse(decodeURIComponent(cookiePair[1]));
+                } catch (err) {
+                    // this is fine, data will be regenerated
+                }
             }
         }
         return {

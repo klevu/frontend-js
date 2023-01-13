@@ -8,7 +8,7 @@
         "klevu/module-productsearch": "^2.8.0"
     },
     "type": "magento-module",
-    "version": "1.4.1",
+    "version": "1.4.2",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

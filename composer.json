@@ -2,13 +2,13 @@
     "name": "klevu/module-frontend-js",
     "description": "Klevu Frontend JavaScript",
     "require": {
-        "php": "~7.1.0|~7.2.0|~7.3.0|~7.4.0|~8.0.0|~8.1.0",
+        "php": "~7.1.0|~7.2.0|~7.3.0|~7.4.0|~8.0.0|~8.1.0|~8.2.0",
         "magento/module-backend": "@stable",
         "magento/module-config": "@stable",
         "klevu/module-productsearch": "^3.0.0"
     },
     "type": "magento2-module",
-    "version": "2.0.2",
+    "version": "2.1.0",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

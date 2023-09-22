@@ -4,10 +4,13 @@
     var klevu_addPriceSuffixToQueryControl = {
         name: 'addPriceSuffixToQuery',
         fire: function (data, scope) {
-            var customerData = JSON.parse(window.localStorage.getItem('<?php /** @noEscape */ echo $block->getLocalStorageKey(); ?>') || '{}').<?php /** @noEscape */ echo $block->getCustomerDataKey(); ?> || {
-                customer_group_id: <?php /** @noEscape */ echo $block->getNotLoggedInCustomerGroupId(); ?>
-            };
-            klevu.search.modules.addPriceSuffixToQuery(data, scope, klevu_baseCurrencyCode, customerData.customer_group_id);
+            var localStorage = JSON.parse(
+                window.localStorage.getItem('<?php /** @noEscape */ echo $block->getLocalStorageKey(); ?>') || '{}'
+            );
+            var customerData = localStorage.<?php /** @noEscape */ echo $block->getCustomerDataKey(); ?> || {};
+            if ("undefined" !== typeof customerData.customer_group_id) {
+                klevu.search.modules.addPriceSuffixToQuery(data, scope, klevu_baseCurrencyCode, customerData.customer_group_id);
+            }
         }
     };
 

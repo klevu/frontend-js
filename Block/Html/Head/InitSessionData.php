@@ -61,11 +61,13 @@ class InitSessionData extends Template
      */
     public function getCookieLifetime()
     {
-        return (int)($this->_scopeConfig->getValue(
+        $lifetime = $this->_scopeConfig->getValue(
             SessionConfig::XML_PATH_COOKIE_LIFETIME,
             ScopeInterface::SCOPE_STORES,
             $this->getCurrentStoreId()
-        ) ?: Constants::DEFAULT_COOKIE_LIFETIME);
+        );
+
+        return (int)($lifetime ?: Constants::DEFAULT_COOKIE_LIFETIME);
     }
 
     /**
@@ -73,11 +75,13 @@ class InitSessionData extends Template
      */
     public function getCookiePath()
     {
-        return (string)($this->_scopeConfig->getValue(
+        $path = $this->_scopeConfig->getValue(
             SessionConfig::XML_PATH_COOKIE_PATH,
             ScopeInterface::SCOPE_STORES,
             $this->getCurrentStoreId()
-        ) ?: Constants::DEFAULT_COOKIE_PATH);
+        );
+
+        return (string)($path ?: Constants::DEFAULT_COOKIE_PATH);
     }
 
     /**

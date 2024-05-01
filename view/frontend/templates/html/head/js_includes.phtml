@@ -1,7 +1,20 @@
 <?php
-    /** @var Klevu\FrontendJs\Block\Html\Head\JsIncludes $block */
-    $jsIncludesUrls = $block->getJsIncludesUrls();
+/**
+ * @var Klevu\FrontendJs\Block\Html\Head\JsIncludes $block
+ * @var Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
+$jsIncludesUrls = $block->getJsIncludesUrls();
 ?>
+
 <?php foreach ($jsIncludesUrls as $jsIncludesUrl): ?>
-    <script type="text/javascript" src="<?php echo $block->escapeUrl($jsIncludesUrl); ?>"></script>
+<?= $secureRenderer->renderTag(
+    'script',
+    [
+        'type' => 'text/javascript',
+        'src' => $block->escapeUrl($jsIncludesUrl)
+    ],
+    null,
+    true
+) ?>
+
 <?php endforeach; ?>

@@ -1,3 +1,14 @@
-<?php /** @var Klevu\FrontendJs\Block\Html\Head\JsPreConnect $block */ ?>
+<?php
+/**
+ * @var Klevu\FrontendJs\Block\Html\Head\JsPreConnect $block
+ * @var Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
+?>
 
-<link rel="preconnect" href="<?= $block->escapeUrl($block->getPreConnectUrl()) ?>"/>
+<?= $secureRenderer->renderTag(
+    'link',
+    [
+        'rel' => 'preconnect',
+        'href' => $block->escapeUrl($block->getPreConnectUrl())
+    ]
+) ?>

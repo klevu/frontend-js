@@ -1,6 +1,20 @@
 <?php
-    /** @var Klevu\FrontendJs\Block\Html\Head\JsApiKeys $block */
+/**
+ * @var Klevu\FrontendJs\Block\Html\Head\JsApiKeys $block
+ * @var Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 ?>
-<script type="text/javascript" id="klevu_jsapikeys">
-    klevu(<?php /** @noEscape */ echo $block->getJsApiKeysSerialized(); ?>);
-</script>
+
+<?php
+$scriptString = <<<script
+
+    klevu({$block->getJsApiKeysSerialized()});
+
+script;
+?>
+<?= $secureRenderer->renderTag(
+    'script',
+    ['type' => 'text/javascript', 'id' => 'klevu_jsapikeys'],
+    $scriptString,
+    false
+) ?>

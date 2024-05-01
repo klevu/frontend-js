@@ -1,13 +1,20 @@
-<?php /** @var Klevu\FrontendJs\Block\Html\Head\JsModules $block */ ?>
-<script type="text/javascript" id="klevu_jsmodules">
+<?php
+/**
+ * @var Klevu\FrontendJs\Block\Html\Head\JsModules $block
+ * @var Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */ ?>
+
+<?php
+$scriptString = <<<script
+
     // Add Price Field Suffix for customer group and currency conversion
     var klevu_addPriceSuffixToQueryControl = {
         name: 'addPriceSuffixToQuery',
         fire: function (data, scope) {
             var localStorage = JSON.parse(
-                window.localStorage.getItem('<?php /** @noEscape */ echo $block->getLocalStorageKey(); ?>') || '{}'
+                window.localStorage.getItem('{$block->getLocalStorageKey()}') || '{}'
             );
-            var customerData = localStorage.<?php /** @noEscape */ echo $block->getCustomerDataKey(); ?> || {};
+            var customerData = localStorage.{$block->getCustomerDataKey()} || {};
             if ("undefined" !== typeof customerData.customer_group_id) {
                 klevu.search.modules.addPriceSuffixToQuery(data, scope, klevu_baseCurrencyCode, customerData.customer_group_id);
             }
@@ -59,4 +66,12 @@
             }
         });
     })(klevu);
-</script>
+
+script;
+?>
+<?= $secureRenderer->renderTag(
+    'script',
+    ['type' => 'text/javascript', 'id' => 'klevu_jsmodules'],
+    $scriptString,
+    false
+) ?>

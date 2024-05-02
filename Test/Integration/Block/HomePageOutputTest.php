@@ -32,23 +32,23 @@ class HomePageOutputTest extends AbstractControllerTestCase
 
         if (method_exists($this, 'assertStringContainsString')) {
             $this->assertStringContainsString(
-                '<script type="text/javascript" src="https://js.klevu.com/core/v2/klevu.js"></script>',
+                '<script type="text&#x2F;javascript" src="https&#x3A;&#x2F;&#x2F;js.klevu.com&#x2F;core&#x2F;v2&#x2F;klevu.js"></script>', // phpcs:ignore Generic.Files.LineLength.TooLong
                 $responseBody,
                 'Library JS include is present in response body'
             );
             $this->assertStringContainsString(
-                '<script type="text/javascript" id="klevu_jsinteractive">',
+                '<script type="text&#x2F;javascript" id="klevu_jsinteractive">',
                 $responseBody,
                 'Initialisation script is present in response body'
             );
         } else {
             $this->assertContains(
-                '<script type="text/javascript" src="https://js.klevu.com/core/v2/klevu.js"></script>',
+                '<script type="text&#x2F;javascript" src="https&#x3A;&#x2F;&#x2F;js.klevu.com&#x2F;core&#x2F;v2&#x2F;klevu.js"></script>', // phpcs:ignore Generic.Files.LineLength.TooLong
                 $responseBody,
                 'Library JS include is present in response body'
             );
             $this->assertContains(
-                '<script type="text/javascript" id="klevu_jsinteractive">',
+                '<script type="text&#x2F;javascript" id="klevu_jsinteractive">',
                 $responseBody,
                 'Initialisation script is present in response body'
             );

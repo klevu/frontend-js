@@ -1,11 +1,24 @@
 <?php
-    /** @var Klevu\FrontendJs\Block\Html\Head\JsInit $block */
+/**
+ * @var Klevu\FrontendJs\Block\Html\Head\JsInit $block
+ * @var Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 ?>
-<script type="text/javascript" id="klevu_jsinteractive">
+<?php
+$scriptString = <<<script
+
     klevu.interactive(function () {
-        var options = <?php /** @noEscape */ echo $block->getInteractiveOptionsSerialized(); ?>;
-        <?php /** @noEscape */ echo $block->getChildHtml('additional_before'); ?>
+        var options = {$block->getInteractiveOptionsSerialized()};
+        {$block->getChildHtml('additional_before')}
         klevu(options);
-        <?php /** @noEscape */ echo $block->getChildHtml('additional_after'); ?>
+        {$block->getChildHtml('additional_after')}
     });
-</script>
+
+script;
+?>
+<?= $secureRenderer->renderTag(
+    'script',
+    ['type' => 'text/javascript', 'id' => 'klevu_jsinteractive'],
+    $scriptString,
+    false
+) ?>

@@ -7,14 +7,25 @@
 
 <?php
 $scriptString = <<<script
-
     klevu({$block->getJsDeferredPowerUpSerialized()});
-
 script;
+
+$script = $block->isDeferJs()
+    ? <<<script
+        window._klvReady = window._klvReady || [];
+        window._klvReady.push(function() {
+            {$scriptString}
+        });
+
+script
+    : $scriptString;
 ?>
 <?= $secureRenderer->renderTag(
     'script',
-    ['type' => 'text/javascript', 'id' => 'klevu_jsdeferredpowerup'],
-    $scriptString,
+    [
+        'type' => 'text/javascript',
+        'id' => 'klevu_jsdeferredpowerup',
+    ],
+    $script,
     false
 ) ?>

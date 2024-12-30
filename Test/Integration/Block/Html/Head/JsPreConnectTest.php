@@ -56,19 +56,29 @@ class JsPreConnectTest extends AbstractControllerTestCase
         $this->assertSame(200, $response->getHttpResponseCode());
         $responseBody = $response->getBody();
 
-        if (method_exists($this, 'assertStringContainsString')) {
-            $this->assertStringContainsString(
-                '<link rel="preconnect" href="https://js.klevu.com"/>',
-                $responseBody,
-                'JS preconnect is present in response body'
-            );
-        } else {
-            $this->assertContains(
-                '<link rel="preconnect" href="https://js.klevu.com"/>',
-                $responseBody,
-                'JS preconnect is present in response body'
-            );
-        }
+        $jsPreconnectMatches = [];
+        preg_match(
+            '#<link rel="preconnect"\s*href="https://js.klevu.com"\s*crossorigin="anonymous"/>#',
+            $responseBody,
+            $jsPreconnectMatches
+        );
+        $this->assertNotCount(
+            0,
+            $jsPreconnectMatches,
+            'JS preconnect is present in response body (js.klevu.com)'
+        );
+
+        $jsStatsPreconnectMatches = [];
+        preg_match(
+            '#<link rel="preconnect"\s*href="https://statsjs.klevu.com"\s*crossorigin="anonymous"/>#',
+            $responseBody,
+            $jsStatsPreconnectMatches
+        );
+        $this->assertNotCount(
+            0,
+            $jsStatsPreconnectMatches,
+            'JS preconnect is present in response body (statsjs.klevu.com)'
+        );
     }
 
     /**

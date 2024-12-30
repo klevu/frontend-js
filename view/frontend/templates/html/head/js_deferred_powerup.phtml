@@ -1,6 +1,27 @@
 <?php
-    /** @var Klevu\FrontendJs\Block\Html\Head\JsDeferredPowerUp $block */
+/**
+ * @var Klevu\FrontendJs\Block\Html\Head\JsDeferredPowerUp $block
+ */
 ?>
+
+<?php
+$scriptString = <<<script
+
+    klevu({$block->getJsDeferredPowerUpSerialized()});
+
+script;
+
+$script = $block->isDeferJs()
+    ? <<<script
+        window._klvReady = window._klvReady || [];
+        window._klvReady.push(function() {
+            {$scriptString}
+        });
+
+script
+    : $scriptString;
+?>
+
 <script type="text/javascript" id="klevu_jsdeferredpowerup">
-    klevu(<?php /** @noEscape */ echo $block->getJsDeferredPowerUpSerialized(); ?>);
+    <?= $script ?>
 </script>

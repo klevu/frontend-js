@@ -4,6 +4,7 @@
         <klevu_frontendjs>
             <configuration>
                 <enabled>0</enabled>
+                <defer_js>0</defer_js>
             </configuration>
         </klevu_frontendjs>
     </default>

@@ -1,6 +1,25 @@
 <?php
-    /** @var Klevu\FrontendJs\Block\Html\Head\JsApiKeys $block */
+/**
+ * @var Klevu\FrontendJs\Block\Html\Head\JsApiKeys $block
+ */
 ?>
+
+<?php
+$scriptString = <<<script
+    klevu({$block->getJsApiKeysSerialized()});
+script;
+
+$script = $block->isDeferJs()
+    ? <<<script
+        window._klvReady = window._klvReady || [];
+        window._klvReady.push(function() {
+            {$scriptString}
+        });
+
+script
+    : $scriptString;
+?>
+
 <script type="text/javascript" id="klevu_jsapikeys">
-    klevu(<?php /** @noEscape */ echo $block->getJsApiKeysSerialized(); ?>);
+    <?= $script ?>
 </script>

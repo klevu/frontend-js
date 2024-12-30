@@ -1,7 +1,13 @@
 <?php
-    /** @var Klevu\FrontendJs\Block\Html\Head\JsIncludes $block */
-    $jsIncludesUrls = $block->getJsIncludesUrls();
+/**
+ * @var Klevu\FrontendJs\Block\Html\Head\JsIncludes $block
+ */
+$jsIncludesUrls = $block->getJsIncludesUrls();
 ?>
+
 <?php foreach ($jsIncludesUrls as $jsIncludesUrl): ?>
-    <script type="text/javascript" src="<?php echo $block->escapeUrl($jsIncludesUrl); ?>"></script>
+    <script type="text/javascript"
+            src="<?php echo $block->escapeUrl($jsIncludesUrl); ?>"
+            <?php if ($block->isDeferJs()): ?>defer="defer"<?php endif; ?>
+    ></script>
 <?php endforeach; ?>

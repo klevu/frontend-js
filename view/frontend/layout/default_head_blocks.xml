@@ -5,7 +5,14 @@
             <block name="klevu_frontendjs.js_preconnect"
                    class="Klevu\FrontendJs\Block\Html\Head\JsPreConnect"
                    template="Klevu_FrontendJs::html/head/js_preconnect.phtml"
-                   before="-"/>
+                   before="-">
+                <arguments>
+                    <argument name="pre_connect_urls" xsi:type="array">
+                        <item name="statsjs"
+                              xsi:type="string"><![CDATA[https://statsjs.klevu.com]]></item>
+                    </argument>
+                </arguments>
+            </block>
             <block name="klevu_frontendjs.js_includes.core"
                    class="Klevu\FrontendJs\Block\Html\Head\JsIncludes"
                    template="Klevu_FrontendJs::html/head/js_includes.phtml">

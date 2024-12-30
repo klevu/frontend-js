@@ -26,6 +26,23 @@ class JsPreConnect extends Template
     }
 
     /**
+     * @return string[]
+     */
+    public function getPreConnectUrls()
+    {
+        return array_filter(
+            array_unique(
+                array_merge(
+                    isset($this->_data['pre_connect_urls']) ? $this->_data['pre_connect_urls'] : [],
+                    [
+                        $this->getPreConnectUrl(),
+                    ]
+                )
+            )
+        );
+    }
+
+    /**
      * @return array
      */
     private function getScope()

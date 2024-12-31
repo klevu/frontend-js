@@ -1,5 +1,7 @@
 <?php
 
+// phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+
 namespace Klevu\FrontendJs\Test\Integration\Block\Html\Head;
 
 use Klevu\FrontendJs\Block\Html\Head\JsIncludes;
@@ -22,6 +24,63 @@ class JsIncludesTest extends TestCase
      * @magentoConfigFixture default/klevu_search/test/output_flag 0
      */
     public function testGetJsIncludesUrls()
+    {
+        $this->setupPhp5();
+
+        /** @var JsIncludes $jsIncludesBlock */
+        $jsIncludesBlock = $this->objectManager->create(JsIncludes::class);
+        $jsIncludesBlock->setData(
+            'js_includes',
+            [
+                'klevu_themev2_srlp' => [
+                    'after' => 'klevu_themev2_quicksearch',
+                    'url' => 'https://{{ klevu_search/general/js_url }}/theme/default/v2/landing-page-theme.js',
+                ],
+                'lib' => [
+                    'before' => '-',
+                    'url' => 'https://{{ klevu_search/general/js_url }}/core/v2/klevu.js',
+                ],
+                'klevu_themev2_quicksearch' => [
+                    'url' => 'https://{{ klevu_search/general/js_url }}/theme/default/v2/quick-search-theme.js',
+                ],
+                'missing_url' => [
+                    'url' => ' ',
+                ],
+                'configured_do_not_output' => [
+                    'url' => 'https://klevu.com/do-not-output',
+                    'if_config' => [
+                        'output_flag_enabled' => [
+                            'path' => 'klevu_search/test/output_flag',
+                            'conditions' => [
+                                'eq' => '1',
+                            ],
+                        ],
+                    ],
+                ],
+                'duplicate' => [
+                    'url' => 'https://{{ klevu_search/general/js_url }}/core/v2/klevu.js',
+                ],
+            ]
+        );
+
+        $expectedResult = [
+            'https://js-test.klevu.com/core/v2/klevu.js',
+            'https://js-test.klevu.com/theme/default/v2/quick-search-theme.js',
+            'https://js-test.klevu.com/theme/default/v2/landing-page-theme.js',
+        ];
+        $actualResult = $jsIncludesBlock->getJsIncludesUrls();
+
+        $this->assertSame($expectedResult, $actualResult);
+    }
+
+    /**
+     * @magentoConfigFixture default/klevu_search/general/js_url js.klevu.com
+     * @magentoConfigFixture default_store klevu_search/general/js_url js-test.klevu.com
+     * @magentoConfigFixture default/klevu_search/test/output_flag 0
+     * @magentoConfigFixture default/klevu_frontendjs/configuration/defer_js 1
+     * @magentoConfigFixture default_store klevu_frontendjs/configuration/defer_js 1
+     */
+    public function testGetJsIncludesUrls_WhenJsDeferred()
     {
         $this->setupPhp5();
 

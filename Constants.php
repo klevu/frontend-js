@@ -5,6 +5,7 @@ namespace Klevu\FrontendJs;
 class Constants
 {
     const XML_PATH_FRONTENDJS_ENABLED = 'klevu_frontendjs/configuration/enabled';
+    const XML_PATH_DEFER_JS = 'klevu_frontendjs/configuration/defer_js';
 
     const LOCAL_STORAGE_KEY = 'klv_mage';
     const LOCAL_STORAGE_CUSTOMER_DATA_KEY = 'customerData';

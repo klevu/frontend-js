@@ -1,3 +1,11 @@
-<?php /** @var Klevu\FrontendJs\Block\Html\Head\JsPreConnect $block */ ?>
+<?php
+/**
+ * @var Klevu\FrontendJs\Block\Html\Head\JsPreConnect $block
+ */
+?>
 
-<link rel="preconnect" href="<?= $block->escapeUrl($block->getPreConnectUrl()) ?>"/>
+<?php foreach ($block->getPreConnectUrls() as $preConnectUrl): ?>
+    <link rel="preconnect"
+          href="<?= $block->escapeUrl($preConnectUrl) ?>"
+        crossorigin="anonymous"/>
+<?php endforeach; ?>

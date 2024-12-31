@@ -4,6 +4,7 @@ namespace Klevu\FrontendJs\Block\Html\Head;
 
 use Klevu\FrontendJs\Api\InteractiveOptionsGeneratorServiceInterface;
 use Klevu\FrontendJs\Api\SerializerInterface;
+use Klevu\FrontendJs\Block\IsDeferJsTrait;
 use Klevu\FrontendJs\Service\IsEnabledDeterminer;
 use Klevu\FrontendJs\Traits\CurrentStoreIdTrait;
 use Magento\Framework\View\Element\Template;
@@ -12,6 +13,7 @@ use Magento\Framework\View\Element\Template\Context;
 class JsDeferredPowerUp extends Template
 {
     use CurrentStoreIdTrait;
+    use IsDeferJsTrait;
 
     /**
      * @var SerializerInterface

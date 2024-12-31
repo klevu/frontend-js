@@ -2,6 +2,7 @@
 
 namespace Klevu\FrontendJs\Block\Html\Head;
 
+use Klevu\FrontendJs\Block\IsDeferJsTrait;
 use Klevu\FrontendJs\Service\IfConfigEvaluator;
 use Klevu\FrontendJs\Service\IsEnabledDeterminer;
 use Klevu\FrontendJs\Service\JsIncludesSorter;
@@ -14,9 +15,10 @@ use Magento\Store\Model\ScopeInterface;
 
 class JsIncludes extends Template
 {
-    const URL_PLACEHOLDER_REGEX_SCOPE_CONFIG = '#(\{\{\s*(?<configPath>[a-zA-Z0-9_]+/[a-zA-Z0-9_]+/[a-zA-Z0-9_]+)\s*\}\})#';
+    const URL_PLACEHOLDER_REGEX_SCOPE_CONFIG = '#(\{\{\s*(?<configPath>[a-zA-Z0-9_]+/[a-zA-Z0-9_]+/[a-zA-Z0-9_]+)\s*\}\})#'; // phpcs:ignore Generic.Files.LineLength.TooLong
 
     use CurrentStoreIdTrait;
+    use IsDeferJsTrait;
 
     /**
      * @var JsIncludesSorter

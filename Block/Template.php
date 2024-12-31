@@ -8,6 +8,8 @@ use Magento\Framework\View\Element\Template as CoreTemplate;
 
 class Template extends CoreTemplate
 {
+    use IsDeferJsTrait;
+
     /**
      * @var IsEnabledConditionInterface[]
      */
@@ -31,7 +33,7 @@ class Template extends CoreTemplate
                             'IsEnabledCondition "%s" must be instance of %s; %s received',
                             $key,
                             IsEnabledConditionInterface::class,
-                            is_object($isEnabledCondition) ? get_class($isEnabledCondition) : gettype($isEnabledCondition)
+                            is_object($isEnabledCondition) ? get_class($isEnabledCondition) : gettype($isEnabledCondition) // phpcs:ignore Magento2.Functions.DiscouragedFunction.Discouraged, Generic.Files.LineLength.TooLong
                         ));
                         continue;
                     }

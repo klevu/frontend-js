@@ -2,6 +2,7 @@
 
 namespace Klevu\FrontendJs\Block\Html\Head;
 
+use Klevu\FrontendJs\Block\IsDeferJsTrait;
 use Klevu\FrontendJs\Block\Template as FrontendJsTemplate;
 use Klevu\FrontendJs\Constants;
 use Magento\Customer\Model\Group as CustomerGroup;
@@ -11,6 +12,8 @@ use Magento\Customer\Model\Group as CustomerGroup;
  */
 class JsModules extends FrontendJsTemplate
 {
+    use IsDeferJsTrait;
+
     /**
      * @return string
      */

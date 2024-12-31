@@ -5,9 +5,9 @@
  */ ?>
 
 <?php
-$scriptString = <<<script
-
+$priceSuffixString = <<<script
     // Add Price Field Suffix for customer group and currency conversion
+    // When javascript is deferred the calling code must use window._klvReady
     var klevu_addPriceSuffixToQueryControl = {
         name: 'addPriceSuffixToQuery',
         fire: function (data, scope) {
@@ -21,6 +21,10 @@ $scriptString = <<<script
         }
     };
 
+script;
+?>
+<?php
+$scriptString = <<<script
     (function (klevu) {
         klevu.extend(true, klevu.search.modules, {
             addPriceSuffixToQuery: function (data, scope, currencyCode, customerGroupId) {
@@ -37,20 +41,18 @@ $scriptString = <<<script
                     );
                 });
             },
+
             mageConvertPriceRecordCurrencyData: function (productRecords, currencyCode, currencyRates) {
                 if (!productRecords) {
                     return;
                 }
-
                 klevu.each(productRecords, function (recordKey, productRecord) {
                     var fromRate = parseFloat(currencyRates[productRecord.currency] || 0);
                     var toRate = parseFloat(currencyRates[currencyCode] || 0);
                     if (!fromRate || !toRate) {
                         return;
                     }
-
                     var exchangeRate = toRate / fromRate;
-
                     if (klevu.isNumeric(klevu.getObjectPath(productRecord, "price"))) {
                         productRecord.price *= exchangeRate;
                     }
@@ -69,9 +71,25 @@ $scriptString = <<<script
 
 script;
 ?>
+<?php
+$script = $block->isDeferJs()
+    ? <<<script
+        window._klvReady = window._klvReady || [];
+        window._klvReady.push(function() {
+            klevu.support.hook(["recs"], function() {
+                {$scriptString}
+            });
+        });
+
+script
+    : $scriptString;
+?>
 <?= $secureRenderer->renderTag(
     'script',
-    ['type' => 'text/javascript', 'id' => 'klevu_jsmodules'],
-    $scriptString,
+    [
+        'type' => 'text/javascript',
+        'id' => 'klevu_jsmodules',
+    ],
+    $priceSuffixString . PHP_EOL . $script,
     false
 ) ?>

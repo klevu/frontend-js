@@ -7,14 +7,20 @@ $jsIncludesUrls = $block->getJsIncludesUrls();
 ?>
 
 <?php foreach ($jsIncludesUrls as $jsIncludesUrl): ?>
-<?= $secureRenderer->renderTag(
-    'script',
-    [
-        'type' => 'text/javascript',
-        'src' => $block->escapeUrl($jsIncludesUrl)
-    ],
-    null,
-    true
-) ?>
+    <?php
+        $tagAttributes = [
+            'type' => 'text/javascript',
+            'src' => $block->escapeUrl($jsIncludesUrl),
+        ];
+        if ($block->isDeferJs()) {
+            $tagAttributes['defer'] = 'defer';
+        }
+    ?>
 
+    <?= $secureRenderer->renderTag(
+        'script',
+        $tagAttributes,
+        null,
+        true
+    ) ?>
 <?php endforeach; ?>

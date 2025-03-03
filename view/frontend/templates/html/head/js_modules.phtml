@@ -5,7 +5,7 @@
  */ ?>
 
 <?php
-$priceSuffixString = <<<script
+$priceSuffixString = "
     // Add Price Field Suffix for customer group and currency conversion
     // When javascript is deferred the calling code must use window._klvReady
     var klevu_addPriceSuffixToQueryControl = {
@@ -15,20 +15,18 @@ $priceSuffixString = <<<script
                 window.localStorage.getItem('{$block->getLocalStorageKey()}') || '{}'
             );
             var customerData = localStorage.{$block->getCustomerDataKey()} || {};
-            if ("undefined" !== typeof customerData.customer_group_id) {
+            if ('undefined' !== typeof customerData.customer_group_id) {
                 klevu.search.modules.addPriceSuffixToQuery(data, scope, klevu_baseCurrencyCode, customerData.customer_group_id);
             }
         }
-    };
-
-script;
+    };";
 ?>
 <?php
-$scriptString = <<<script
+$scriptString = "
     (function (klevu) {
         klevu.extend(true, klevu.search.modules, {
             addPriceSuffixToQuery: function (data, scope, currencyCode, customerGroupId) {
-                if (typeof data.request.current === "undefined") {
+                if (typeof data.request.current === 'undefined') {
                     return false;
                 }
 
@@ -36,7 +34,7 @@ $scriptString = <<<script
                     //code to fetch prices
                     klevu.setObjectPath(
                         data,
-                        "localOverrides.query." + query.id + ".settings.priceFieldSuffix",
+                        'localOverrides.query.' + query.id + '.settings.priceFieldSuffix',
                         currencyCode + '-' + customerGroupId
                     );
                 });
@@ -53,13 +51,13 @@ $scriptString = <<<script
                         return;
                     }
                     var exchangeRate = toRate / fromRate;
-                    if (klevu.isNumeric(klevu.getObjectPath(productRecord, "price"))) {
+                    if (klevu.isNumeric(klevu.getObjectPath(productRecord, 'price'))) {
                         productRecord.price *= exchangeRate;
                     }
-                    if (klevu.isNumeric(klevu.getObjectPath(productRecord, "salePrice"))) {
+                    if (klevu.isNumeric(klevu.getObjectPath(productRecord, 'salePrice'))) {
                         productRecord.salePrice *= exchangeRate;
                     }
-                    if (klevu.isNumeric(klevu.getObjectPath(productRecord, "startPrice"))) {
+                    if (klevu.isNumeric(klevu.getObjectPath(productRecord, 'startPrice'))) {
                         productRecord.startPrice *= exchangeRate;
                     }
 
@@ -68,20 +66,17 @@ $scriptString = <<<script
             }
         });
     })(klevu);
-
-script;
+";
 ?>
 <?php
 $script = $block->isDeferJs()
-    ? <<<script
+    ? "
         window._klvReady = window._klvReady || [];
         window._klvReady.push(function() {
-            klevu.support.hook(["recs"], function() {
+            klevu.support.hook([\"recs\"], function() {
                 {$scriptString}
             });
-        });
-
-script
+        });"
     : $scriptString;
 ?>
 <?= $secureRenderer->renderTag(

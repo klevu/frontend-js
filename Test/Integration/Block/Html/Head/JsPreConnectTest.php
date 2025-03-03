@@ -56,29 +56,29 @@ class JsPreConnectTest extends AbstractControllerTestCase
         $this->assertSame(200, $response->getHttpResponseCode());
         $responseBody = $response->getBody();
 
-        if (method_exists($this, 'assertStringContainsString')) {
-            $this->assertStringContainsString(
-                '<link rel="preconnect" href="https&#x3A;&#x2F;&#x2F;js.klevu.com" crossorigin="anonymous"/>',
-                $responseBody,
-                'JS preconnect is present in response body (js.klevu.com)'
-            );
-            $this->assertStringContainsString(
-                '<link rel="preconnect" href="https&#x3A;&#x2F;&#x2F;statsjs.klevu.com" crossorigin="anonymous"/>',
-                $responseBody,
-                'JS preconnect is present in response body (statsjs.klevu.com)'
-            );
-        } else {
-            $this->assertContains(
-                '<link rel="preconnect" href="https&#x3A;&#x2F;&#x2F;js.klevu.com"/>',
-                $responseBody,
-                'JS preconnect is present in response body (js.klevu.com)'
-            );
-            $this->assertContains(
-                '<link rel="preconnect" href="https&#x3A;&#x2F;&#x2F;statsjs.klevu.com"/>',
-                $responseBody,
-                'JS preconnect is present in response body (statsjs.klevu.com)'
-            );
-        }
+        $jsPreconnectMatches = [];
+        preg_match(
+            '#<link rel="preconnect"\s*href="https&\#x3A;&\#x2F;&\#x2F;js.klevu.com"\s*crossorigin="anonymous"/>#',
+            $responseBody,
+            $jsPreconnectMatches
+        );
+        $this->assertNotCount(
+            0,
+            $jsPreconnectMatches,
+            'JS preconnect is present in response body (js.klevu.com)'
+        );
+
+        $jsStatsPreconnectMatches = [];
+        preg_match(
+            '#<link rel="preconnect"\s*href="https&\#x3A;&\#x2F;&\#x2F;statsjs.klevu.com"\s*crossorigin="anonymous"/>#',
+            $responseBody,
+            $jsStatsPreconnectMatches
+        );
+        $this->assertNotCount(
+            0,
+            $jsStatsPreconnectMatches,
+            'JS preconnect is present in response body (statsjs.klevu.com)'
+        );
     }
 
     /**

@@ -6,18 +6,16 @@
 ?>
 
 <?php
-$scriptString = <<<script
+$scriptString = "
     klevu({$block->getJsDeferredPowerUpSerialized()});
-script;
+";
 
 $script = $block->isDeferJs()
-    ? <<<script
+    ? "
         window._klvReady = window._klvReady || [];
         window._klvReady.push(function() {
             {$scriptString}
-        });
-
-script
+        });"
     : $scriptString;
 ?>
 <?= $secureRenderer->renderTag(

@@ -5,23 +5,22 @@
  */ ?>
 
 <?php
-$scriptString = <<<script
-
+$scriptString = "
     var nowUnixtime = parseInt(Date.now() / 1000);
 
     function klevufejs_getCookie(name) {
-        if (typeof (name) === "undefined") {
-            name = "{$block->getCookieKey()}";
+        if (typeof (name) === 'undefined') {
+            name = '{$block->getCookieKey()}';
         }
-        var c = "",
+        var c = '',
             ca = document.cookie.split(';');
 
         for (var i = 0; i < ca.length; i++) {
             c = ca[i];
-            if (typeof c !== "string") {
+            if (typeof c !== 'string') {
                 continue;
             }
-            var cookiePair = c.split("=");
+            var cookiePair = c.split('=');
 
             if (name === cookiePair[0].trim()) {
                 try {
@@ -40,10 +39,10 @@ $scriptString = <<<script
     var klevufejs_cookie = klevufejs_getCookie();
     klevufejs_cookie.{$block->getExpireSectionsKey()}.{$block->getCustomerDataKey()} = nowUnixtime + {$block->getCustomerDataSectionTtl()};
 
-    document.cookie = "{$block->getCookieKey()}=" + JSON.stringify(klevufejs_cookie)
-        + "; expires=" + new Date((nowUnixtime + {$block->getCookieLifetime()}) * 1000).toUTCString()
-        + "; path={$block->getCookiePath()}"
-        + "; samesite=strict";
+    document.cookie = '{$block->getCookieKey()}=' + JSON.stringify(klevufejs_cookie)
+        + '; expires=' + new Date((nowUnixtime + {$block->getCookieLifetime()}) * 1000).toUTCString()
+        + '; path={$block->getCookiePath()}'
+        + '; samesite=strict';
     });
 
     var klevufejs_cookie = klevufejs_getCookie();
@@ -61,7 +60,7 @@ $scriptString = <<<script
     const klevuCustomerDataLoadErrorEvent = document.createEvent('CustomEvent');
     klevuCustomerDataLoadErrorEvent.initEvent('{$block->getCustomerDataLoadErrorEventName()}', false, true);
 
-    if (typeof klevufejs_cookie.{$block->getExpireSectionsKey()} !== "object"
+    if (typeof klevufejs_cookie.{$block->getExpireSectionsKey()} !== 'object'
         || (klevufejs_cookie.{$block->getExpireSectionsKey()}.{$block->getCustomerDataKey()} || -1) < nowUnixtime
         || klevuData.{$block->getCustomerDataKey()}.revalidate_after < nowUnixtime
         ) {
@@ -87,8 +86,7 @@ $scriptString = <<<script
     } else {
         document.dispatchEvent(klevuCustomerDataLoadedEvent);
     }
-
-script;
+";
 ?>
 <?= $secureRenderer->renderTag(
     'script',

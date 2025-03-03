@@ -32,29 +32,29 @@ class HomePageOutputTest extends AbstractControllerTestCase
         $responseBody = $response->getBody();
         $this->assertSame(200, $response->getHttpResponseCode());
 
-        if (method_exists($this, 'assertStringContainsString')) {
-            $this->assertStringContainsString(
-                '<script type="text&#x2F;javascript" src="https&#x3A;&#x2F;&#x2F;js.klevu.com&#x2F;core&#x2F;v2&#x2F;klevu.js"></script>', // phpcs:ignore Generic.Files.LineLength.TooLong
-                $responseBody,
-                'Library JS include is present in response body'
-            );
-            $this->assertStringContainsString(
-                '<script type="text&#x2F;javascript" id="klevu_jsinteractive">',
-                $responseBody,
-                'Initialisation script is present in response body'
-            );
-        } else {
-            $this->assertContains(
-                '<script type="text&#x2F;javascript" src="https&#x3A;&#x2F;&#x2F;js.klevu.com&#x2F;core&#x2F;v2&#x2F;klevu.js"></script>', // phpcs:ignore Generic.Files.LineLength.TooLong
-                $responseBody,
-                'Library JS include is present in response body'
-            );
-            $this->assertContains(
-                '<script type="text&#x2F;javascript" id="klevu_jsinteractive">',
-                $responseBody,
-                'Initialisation script is present in response body'
-            );
-        }
+        $jsCoreMatches = [];
+        preg_match(
+            '#<script\s*type="text&\#x2F;javascript"\s*src="https&\#x3A;&\#x2F;&\#x2F;js\.klevu\.com&\#x2F;core&\#x2F;v2&\#x2F;klevu\.js"\s*></script>#',
+            $responseBody,
+            $jsCoreMatches
+        );
+        $this->assertNotCount(
+            0,
+            $jsCoreMatches,
+            'Library JS include is present in response body'
+        );
+
+        $jsInteractiveMatches = [];
+        preg_match(
+            '#<script\s*type="text&\#x2F;javascript"\s*id="klevu_jsinteractive">#',
+            $responseBody,
+            $jsInteractiveMatches
+        );
+        $this->assertNotCount(
+            0,
+            $jsInteractiveMatches,
+            'Initialisation script is present in response body'
+        );
     }
 
     /**
@@ -76,29 +76,29 @@ class HomePageOutputTest extends AbstractControllerTestCase
         $responseBody = $response->getBody();
         $this->assertSame(200, $response->getHttpResponseCode());
 
-        if (method_exists($this, 'assertStringContainsString')) {
-            $this->assertStringContainsString(
-                '<script type="text&#x2F;javascript" src="https&#x3A;&#x2F;&#x2F;js.klevu.com&#x2F;core&#x2F;v2&#x2F;klevu.js" defer="defer"></script>', // phpcs:ignore Generic.Files.LineLength.TooLong
-                $responseBody,
-                'Library JS include is present in response body'
-            );
-            $this->assertStringContainsString(
-                '<script type="text&#x2F;javascript" id="klevu_jsinteractive">',
-                $responseBody,
-                'Initialisation script is present in response body'
-            );
-        } else {
-            $this->assertContains(
-                '<script type="text&#x2F;javascript" src="https&#x3A;&#x2F;&#x2F;js.klevu.com&#x2F;core&#x2F;v2&#x2F;klevu.js" defer="defer"></script>', // phpcs:ignore Generic.Files.LineLength.TooLong
-                $responseBody,
-                'Library JS include is present in response body'
-            );
-            $this->assertContains(
-                '<script type="text&#x2F;javascript" id="klevu_jsinteractive">',
-                $responseBody,
-                'Initialisation script is present in response body'
-            );
-        }
+        $jsCoreMatches = [];
+        preg_match(
+            '#<script\s*type="text&\#x2F;javascript"\s*src="https&\#x3A;&\#x2F;&\#x2F;js\.klevu\.com&\#x2F;core&\#x2F;v2&\#x2F;klevu\.js"\s*defer="defer"\s*></script>#',
+            $responseBody,
+            $jsCoreMatches
+        );
+        $this->assertNotCount(
+            0,
+            $jsCoreMatches,
+            'Library JS include is present in response body'
+        );
+
+        $jsInteractiveMatches = [];
+        preg_match(
+            '#<script\s*type="text&\#x2F;javascript"\s*id="klevu_jsinteractive">#',
+            $responseBody,
+            $jsInteractiveMatches
+        );
+        $this->assertNotCount(
+            0,
+            $jsInteractiveMatches,
+            'Initialisation script is present in response body'
+        );
     }
 
     /**

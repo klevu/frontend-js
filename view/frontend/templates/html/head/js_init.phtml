@@ -5,26 +5,23 @@
  */
 ?>
 <?php
-$scriptString = <<<script
+$scriptString = "
     klevu.interactive(function () {
         var options = {$block->getInteractiveOptionsSerialized()};
         {$block->getChildHtml('additional_before')}
         klevu(options);
         {$block->getChildHtml('additional_after')}
     });
-
-script;
+";
 
 $script = $block->isDeferJs()
-    ? <<<script
+    ? "
         window._klvReady = window._klvReady || [];
         window._klvReady.push(function() {
-            klevu.support.hook(["recs"], function() {
+            klevu.support.hook([\"recs\"], function() {
                 {$scriptString}
             });
-        });
-
-script
+        });"
     : $scriptString;
 ?>
 <?= $secureRenderer->renderTag(

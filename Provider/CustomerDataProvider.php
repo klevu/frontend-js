@@ -64,7 +64,7 @@ class CustomerDataProvider implements CustomerDataProviderInterface
         SessionIdProviderInterface $sessionIdProvider,
         RemoteAddress $remoteAddress,
         CustomerDataInterfaceFactory $customerDataFactory,
-        CustomerIdProviderInterface $customerIdProvider = null
+        ?CustomerIdProviderInterface $customerIdProvider = null
     ) {
         $this->logger = $logger;
         $this->customerSession = $customerSession;

@@ -15,7 +15,7 @@ trait CurrentStoreIdTrait
      */
     private function getCurrentStoreId(
         StoreManagerInterface $storeManager,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         try {
             $store = $storeManager->getStore();

@@ -52,7 +52,7 @@ class JsIncludes extends Template
         JsIncludesSorter $jsIncludesSorter,
         IsEnabledDeterminer $isEnabledDeterminer,
         array $data = [],
-        IfConfigEvaluator $ifConfigEvaluator = null
+        ?IfConfigEvaluator $ifConfigEvaluator = null
     ) {
         parent::__construct($context, $data);
 

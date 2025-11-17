@@ -17,7 +17,7 @@ $jsIncludesUrls = $block->getJsIncludesUrls();
         }
     ?>
 
-    <?= $secureRenderer->renderTag(
+    <?= /* @noEscape */ $secureRenderer->renderTag(
         'script',
         $tagAttributes,
         null,

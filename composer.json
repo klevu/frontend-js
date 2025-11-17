@@ -9,7 +9,7 @@
         "klevu/module-productsearch": "^3.7.0"
     },
     "type": "magento2-module",
-    "version": "2.4.0",
+    "version": "2.4.1",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

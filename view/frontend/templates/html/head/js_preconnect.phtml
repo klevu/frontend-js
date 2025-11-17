@@ -6,7 +6,7 @@
 ?>
 
 <?php foreach ($block->getPreConnectUrls() as $preConnectUrl): ?>
-    <?= $secureRenderer->renderTag(
+    <?= /* @noEscape */ $secureRenderer->renderTag(
         'link',
         [
             'rel' => 'preconnect',
